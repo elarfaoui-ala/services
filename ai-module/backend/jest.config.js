@@ -1,0 +1,15 @@
+/** @type {import('jest').Config} */
+module.exports = {
+  moduleFileExtensions: ['js', 'json', 'ts'],
+  rootDir: 'src',
+  testRegex: '.*\\.spec\\.ts$',
+  transform: {
+    '^.+\\.ts$': 'ts-jest',
+  },
+  moduleNameMapper: {
+    '^@anthropic-ai/sdk$': '<rootDir>/__mocks__/@anthropic-ai/sdk.ts',
+  },
+  collectCoverageFrom: ['**/*.ts', '!main.ts', '!**/*.module.ts'],
+  coverageDirectory: '../coverage',
+  testEnvironment: 'node',
+};

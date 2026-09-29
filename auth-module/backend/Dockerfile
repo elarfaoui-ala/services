@@ -1,0 +1,54 @@
+# syntax=docker/dockerfile:1
+# build from repo root:  docker build -f auth-module/backend/Dockerfile .
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Workspace manifests so `npm ci` can reconcile the root lockfile
+COPY package.json package-lock.json ./
+COPY shared/core/package.json shared/core/
+COPY auth-module/backend/package.json auth-module/backend/
+COPY auth-module/frontend/package.json auth-module/frontend/
+COPY notification-module/backend/package.json notification-module/backend/
+COPY notification-module/frontend/package.json notification-module/frontend/
+COPY dashboard-module/backend/package.json dashboard-module/backend/
+COPY dashboard-module/frontend/package.json dashboard-module/frontend/
+COPY dashboard-module/shared/package.json dashboard-module/shared/
+COPY ai-module/backend/package.json ai-module/backend/
+COPY ai-module/frontend/package.json ai-module/frontend/
+
+RUN --mount=type=cache,target=/root/.npm npm ci --ignore-scripts
+
+# Build shared core to dist and repoint its entry there (Node cannot load TS in prod)
+COPY shared/core/ shared/core/
+RUN npm run build --workspace @services/core \
+ && node -e "const fs=require('fs');const p='shared/core/package.json';const j=JSON.parse(fs.readFileSync(p));j.main='dist/index.js';j.types='dist/index.js';fs.writeFileSync(p,JSON.stringify(j,null,2));"
+
+COPY auth-module/backend/ auth-module/backend/
+RUN npm run build --workspace @services/auth-backend
+
+# ── Production image ──────────────────────────────────────────────────────────
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY package.json package-lock.json ./
+COPY shared/core/package.json shared/core/
+COPY auth-module/backend/package.json auth-module/backend/
+COPY auth-module/frontend/package.json auth-module/frontend/
+COPY notification-module/backend/package.json notification-module/backend/
+COPY notification-module/frontend/package.json notification-module/frontend/
+COPY dashboard-module/backend/package.json dashboard-module/backend/
+COPY dashboard-module/frontend/package.json dashboard-module/frontend/
+COPY dashboard-module/shared/package.json dashboard-module/shared/
+COPY ai-module/backend/package.json ai-module/backend/
+COPY ai-module/frontend/package.json ai-module/frontend/
+
+COPY --from=builder /app/node_modules ./node_modules
+
+COPY --from=builder /app/auth-module/backend/dist auth-module/backend/dist
+COPY --from=builder /app/shared/core shared/core
+
+EXPOSE 4000
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+CMD ["node", "auth-module/backend/dist/main.js"]

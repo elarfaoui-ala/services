@@ -1,0 +1,26 @@
+# Production override — use with:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Prerequisites:
+#   1. Set DOMAIN and EMAIL in .env
+#   2. Run initial cert: npm run certs:init
+#   3. Bring up: npm run docker:prod
+
+services:
+  gateway:
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env for production}
+    volumes:
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done.'"
+
+volumes:
+  certbot_certs:
+  certbot_webroot:

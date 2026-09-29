@@ -1,0 +1,49 @@
+{
+  "name": "services",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for all microservices",
+  "workspaces": [
+    "shared/core",
+    "auth-module/backend",
+    "auth-module/frontend",
+    "notification-module/backend",
+    "notification-module/frontend",
+    "dashboard-module/backend",
+    "dashboard-module/frontend",
+    "dashboard-module/shared",
+    "ai-module/backend",
+    "ai-module/frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:auth\" \"npm run dev:notification\" \"npm run dev:dashboard\" \"npm run dev:ai\"",
+    "dev:auth": "npm run start:dev --prefix auth-module/backend",
+    "dev:notification": "npm run start:dev --prefix notification-module/backend",
+    "dev:dashboard": "npm run dev --prefix dashboard-module",
+    "dev:ai": "npm run start:dev --prefix ai-module/backend",
+    "build": "npm run build --prefix auth-module/backend && npm run build --prefix notification-module/backend && npm run build --prefix dashboard-module/backend && npm run build --prefix ai-module/backend",
+    "test": "npm run test --prefix auth-module/backend && npm run test --prefix dashboard-module/backend && npm run test --prefix notification-module/backend && npm run test --prefix ai-module/backend",
+    "build:frontend": "npm run build --prefix auth-module/frontend && npm run build --prefix notification-module/frontend && npm run build --prefix dashboard-module/frontend && npm run build --prefix ai-module/frontend",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern .next --ignore-pattern coverage",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern .next --ignore-pattern coverage",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "docker:prod": "docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build",
+    "docker:prod:down": "docker compose -f docker-compose.yml -f docker-compose.prod.yml down",
+    "certs:init": "bash nginx/init-prod-certs.sh"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^8.57.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.8.3"
+  }
+}

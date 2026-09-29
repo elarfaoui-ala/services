@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+**/node_modules
+
+# Build output
+dist
+**/dist
+.next
+**/.next
+out
+coverage
+**/coverage
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# Git
+.git
+.gitignore
+
+# Logs / runtime
+*.log
+npm-debug.log*
+.pids
+
+# Editor / OS
+.idea
+.vscode
+*.swp
+.DS_Store
+Thumbs.db
+
+# Misc
+.husky
+*.md

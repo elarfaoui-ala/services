@@ -1,0 +1,92 @@
+groups:
+  # ── Service Health ───────────────────────────────────────────────────────────
+  - name: service_health
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} is down"
+          description: "{{ $labels.instance }} has been unreachable for 30s."
+
+      - alert: HighErrorRate
+        expr: >
+          sum(rate(http_requests_total{status=~"[45].."}[5m])) by (service)
+          / sum(rate(http_requests_total[5m])) by (service)
+          > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on {{ $labels.service }}"
+          description: "{{ $labels.service }} error rate is {{ $value | humanizePercentage }} (threshold: 5%)."
+
+      - alert: SustainedHighErrorRate
+        expr: >
+          sum(rate(http_requests_total{status=~"[5].."}[5m])) by (service)
+          / sum(rate(http_requests_total[5m])) by (service)
+          > 0.10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical error rate on {{ $labels.service }}"
+          description: "{{ $labels.service }} 5xx rate is {{ $value | humanizePercentage }} (threshold: 10%)."
+
+  # ── Latency ──────────────────────────────────────────────────────────────────
+  - name: latency
+    rules:
+      - alert: HighP99Latency
+        expr: >
+          histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service))
+          > 2
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High P99 latency on {{ $labels.service }}"
+          description: "{{ $labels.service }} P99 latency is {{ $value | humanizeDuration }} (threshold: 2s)."
+
+      - alert: HighP50Latency
+        expr: >
+          histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service))
+          > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elevated median latency on {{ $labels.service }}"
+          description: "{{ $labels.service }} P50 latency is {{ $value | humanizeDuration }} (threshold: 1s)."
+
+  # ── Infrastructure ───────────────────────────────────────────────────────────
+  - name: infrastructure
+    rules:
+      - alert: HighMemoryUsage
+        expr: >
+          process_resident_memory_bytes / 1024 / 1024 > 512
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory on {{ $labels.service }}"
+          description: "{{ $labels.service }} using {{ $value | humanize1024 }}B of memory (threshold: 512MB)."
+
+      - alert: HighFileDescriptors
+        expr: process_open_fds / process_max_fds > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "File descriptor exhaustion on {{ $labels.service }}"
+          description: "{{ $labels.service }} using {{ $value | humanizePercentage }} of file descriptors."
+
+      - alert: NginxConnectionsSaturated
+        expr: nginx_connections_active > 900
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Nginx connections nearly saturated"
+          description: "Active connections: {{ $value }} (threshold: 900, max worker_connections: 1024)."

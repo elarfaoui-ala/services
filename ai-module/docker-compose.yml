@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: ai-module/backend/Dockerfile
+    ports:
+      - "${AI_PORT:-4003}:4003"
+    environment:
+      PORT: ${AI_PORT:-4003}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?Set ANTHROPIC_API_KEY in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+    restart: unless-stopped
