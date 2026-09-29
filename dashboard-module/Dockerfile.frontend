@@ -21,6 +21,7 @@ COPY ai-module/frontend/package.json ai-module/frontend/
 RUN --mount=type=cache,target=/root/.npm npm ci --ignore-scripts
 
 COPY dashboard-module/frontend/ dashboard-module/frontend/
+COPY dashboard-module/shared/ dashboard-module/shared/
 RUN npm run build --workspace @services/dashboard-frontend
 
 # ── Production image ──────────────────────────────────────────────────────────
