@@ -1,6 +1,4 @@
-import {
-  Controller, Post, Body, Res, HttpCode, HttpStatus, UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, Res, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
@@ -18,10 +16,7 @@ export class AiController {
   @ApiOperation({ summary: 'Stream chat with Claude (SSE)' })
   @ApiResponse({ status: 200, description: 'SSE stream of chat response chunks' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async chatStream(
-    @Body() req: ChatRequestDto,
-    @Res() res: Response,
-  ) {
+  async chatStream(@Body() req: ChatRequestDto, @Res() res: Response) {
     await this.ai.streamChat(req, res);
   }
 

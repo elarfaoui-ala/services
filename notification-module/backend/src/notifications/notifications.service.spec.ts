@@ -14,10 +14,7 @@ describe('NotificationsService', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        NotificationsService,
-        { provide: NotificationsGateway, useValue: mockGateway },
-      ],
+      providers: [NotificationsService, { provide: NotificationsGateway, useValue: mockGateway }],
     }).compile();
 
     service = module.get<NotificationsService>(NotificationsService);

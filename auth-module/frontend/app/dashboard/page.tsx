@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect }  from 'react';
-import { useRouter }  from 'next/navigation';
-import { useAuth }    from '../../lib/auth-context';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../../lib/auth-context';
 
 export default function DashboardPage() {
   const { user, isLoading, logout } = useAuth();
@@ -36,9 +36,7 @@ export default function DashboardPage() {
 
       <div className="max-w-2xl mx-auto px-6 py-10">
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="text-xl font-bold text-gray-900">
-            Welcome back, {user.name}
-          </h2>
+          <h2 className="text-xl font-bold text-gray-900">Welcome back, {user.name}</h2>
 
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="bg-gray-50 rounded-lg p-4">
@@ -47,10 +45,14 @@ export default function DashboardPage() {
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-gray-500 mb-1">Role</p>
-              <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium
-                ${user.role === 'admin'
-                  ? 'bg-purple-100 text-purple-700'
-                  : 'bg-blue-100 text-blue-700'}`}>
+              <span
+                className={`inline-flex px-2 py-0.5 rounded text-xs font-medium
+                ${
+                  user.role === 'admin'
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'bg-blue-100 text-blue-700'
+                }`}
+              >
                 {user.role}
               </span>
             </div>

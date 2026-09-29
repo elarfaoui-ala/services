@@ -1,9 +1,9 @@
 'use client';
 
-import Link                    from 'next/link';
-import { ChatInterface }       from '../../components/chat/chat-interface';
-import { ErrorBoundary }       from '../../components/error-boundary';
-import { ThemeToggle }         from '../../components/theme-toggle';
+import Link from 'next/link';
+import { ChatInterface } from '../../components/chat/chat-interface';
+import { ErrorBoundary } from '../../components/error-boundary';
+import { ThemeToggle } from '../../components/theme-toggle';
 
 export default function ChatPage() {
   return (
@@ -11,12 +11,16 @@ export default function ChatPage() {
       <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-6 py-3 flex items-center gap-4">
         <h1 className="text-sm font-bold">AI Module</h1>
         <div className="flex gap-3 text-xs">
-          <Link href="/chat"
-                className="text-blue-600 dark:text-blue-400 font-medium border-b-2 border-blue-600 dark:border-blue-400 pb-0.5">
+          <Link
+            href="/chat"
+            className="text-blue-600 dark:text-blue-400 font-medium border-b-2 border-blue-600 dark:border-blue-400 pb-0.5"
+          >
             Chat
           </Link>
-          <Link href="/summarize"
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+          <Link
+            href="/summarize"
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+          >
             Summarizer
           </Link>
         </div>

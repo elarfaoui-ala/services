@@ -3,8 +3,7 @@
 const ACCESS_KEY = 'ai_access_token';
 const REFRESH_KEY = 'ai_refresh_token';
 
-const AUTH_URL =
-  process.env.NEXT_PUBLIC_AUTH_URL ?? 'http://localhost:4000/api';
+const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL ?? 'http://localhost:4000/api';
 
 export const AUTH_LOGOUT_EVENT = 'auth:logout';
 
@@ -77,10 +76,7 @@ async function refreshAccessToken(): Promise<boolean> {
  * fetch wrapper that attaches the Bearer token, refreshes it once on 401
  * and broadcasts a logout event when the session is truly gone.
  */
-export async function authorizedFetch(
-  input: string | URL,
-  init?: RequestInit,
-): Promise<Response> {
+export async function authorizedFetch(input: string | URL, init?: RequestInit): Promise<Response> {
   const doFetch = (): Promise<Response> => {
     const token = getAccessToken();
     const headers = new Headers(init?.headers);

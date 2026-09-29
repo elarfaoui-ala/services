@@ -1,15 +1,15 @@
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
 export interface AuthTokens {
-  accessToken:  string;
+  accessToken: string;
   refreshToken: string;
 }
 
 export interface User {
-  id:    string;
+  id: string;
   email: string;
-  name:  string;
-  role:  string;
+  name: string;
+  role: string;
 }
 
 export interface AuthResponse extends AuthTokens {
@@ -43,13 +43,16 @@ export const authApi = {
     request<AuthResponse>('/auth/login', { method: 'POST', body: JSON.stringify(body) }),
 
   refresh: (refreshToken: string) =>
-    request<AuthTokens>('/auth/refresh', { method: 'POST', body: JSON.stringify({ refreshToken }) }),
+    request<AuthTokens>('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken }),
+    }),
 
   logout: (accessToken: string, refreshToken: string) =>
     request('/auth/logout', {
-      method:  'POST',
+      method: 'POST',
       headers: { Authorization: `Bearer ${accessToken}` },
-      body:    JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refreshToken }),
     }),
 
   me: (accessToken: string) =>

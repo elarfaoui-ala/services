@@ -17,16 +17,22 @@ function ResetPasswordContent() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!token) { setError('Missing reset token.'); return; }
-    if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
+    if (!token) {
+      setError('Missing reset token.');
+      return;
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
       await authApi.resetPassword(token, password);
       setDone(true);
       setTimeout(() => router.push('/login'), 3000);
-    } catch (err: any) {
-      setError(err.message ?? 'Something went wrong');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -36,10 +42,16 @@ function ResetPasswordContent() {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
-          <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">&#10003;</div>
+          <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+            &#10003;
+          </div>
           <h1 className="text-xl font-bold text-gray-900 mb-2">Password reset</h1>
-          <p className="text-gray-600 text-sm mb-4">Your password has been updated. Redirecting to login...</p>
-          <Link href="/login" className="text-blue-600 hover:underline text-sm">Go to login</Link>
+          <p className="text-gray-600 text-sm mb-4">
+            Your password has been updated. Redirecting to login...
+          </p>
+          <Link href="/login" className="text-blue-600 hover:underline text-sm">
+            Go to login
+          </Link>
         </div>
       </main>
     );
@@ -51,7 +63,9 @@ function ResetPasswordContent() {
         <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
           <h1 className="text-xl font-bold text-gray-900 mb-2">Invalid link</h1>
           <p className="text-gray-600 text-sm mb-4">No reset token found in the URL.</p>
-          <Link href="/forgot-password" className="text-blue-600 hover:underline text-sm">Request a new link</Link>
+          <Link href="/forgot-password" className="text-blue-600 hover:underline text-sm">
+            Request a new link
+          </Link>
         </div>
       </main>
     );
@@ -64,15 +78,31 @@ function ResetPasswordContent() {
         <p className="text-sm text-gray-500 mb-8">Enter your new password.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">New password</label>
-            <input id="password" name="password" type="password" autoComplete="new-password" required minLength={8}
-              value={password} onChange={e => { setPassword(e.target.value); setError(null); }}
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+              New password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(null);
+              }}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" />
+              placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;"
+            />
           </div>
           {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
-          <button type="submit" disabled={loading}
-            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+          >
             {loading ? 'Resetting...' : 'Reset password'}
           </button>
         </form>
@@ -83,7 +113,13 @@ function ResetPasswordContent() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
       <ResetPasswordContent />
     </Suspense>
   );

@@ -13,7 +13,11 @@ import { JwtStrategy } from '../auth/jwt.strategy';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET') ?? (() => { throw new Error('JWT_SECRET env var is required'); })(),
+        secret:
+          config.get<string>('JWT_SECRET') ??
+          (() => {
+            throw new Error('JWT_SECRET env var is required');
+          })(),
         signOptions: { expiresIn: '15m' },
       }),
     }),

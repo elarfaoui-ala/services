@@ -35,22 +35,22 @@ A microservices platform composed of four modules — **Auth**, **Notifications*
 
 ## Modules / ports
 
-| Service              | Type      | Container | Host       |
-| -------------------- | --------- | --------- | ---------- |
-| gateway              | nginx     | 80 / 443  | 80 / 443   |
-| auth-backend         | NestJS    | 4000      | (exposed)  |
-| auth-frontend        | Next.js   | 3000      | 3000       |
-| notification-backend | NestJS    | 4001      | (exposed)  |
-| notification-frontend| Next.js   | 3000      | 3002       |
-| dashboard-backend    | NestJS    | 4002      | (exposed)  |
-| dashboard-frontend   | Next.js   | 3000      | 3001       |
-| ai-backend           | NestJS    | 4003      | (exposed)  |
-| ai-frontend          | Next.js   | 3000      | 3003       |
-| postgres             | PostgreSQL| 5432      | 5432       |
-| redis                | Redis     | 6379      | 6379       |
-| prometheus           | —         | 9090      | 9090       |
-| alertmanager         | —         | 9093      | 9094       |
-| grafana              | —         | 3000      | 3004       |
+| Service               | Type       | Container | Host      |
+| --------------------- | ---------- | --------- | --------- |
+| gateway               | nginx      | 80 / 443  | 80 / 443  |
+| auth-backend          | NestJS     | 4000      | (exposed) |
+| auth-frontend         | Next.js    | 3000      | 3000      |
+| notification-backend  | NestJS     | 4001      | (exposed) |
+| notification-frontend | Next.js    | 3000      | 3002      |
+| dashboard-backend     | NestJS     | 4002      | (exposed) |
+| dashboard-frontend    | Next.js    | 3000      | 3001      |
+| ai-backend            | NestJS     | 4003      | (exposed) |
+| ai-frontend           | Next.js    | 3000      | 3003      |
+| postgres              | PostgreSQL | 5432      | 5432      |
+| redis                 | Redis      | 6379      | 6379      |
+| prometheus            | —          | 9090      | 9090      |
+| alertmanager          | —          | 9093      | 9094      |
+| grafana               | —          | 3000      | 3004      |
 
 ## Repository layout
 
@@ -88,13 +88,13 @@ Then open `http://localhost` (gateway). The four frontends are also reachable di
 
 Required secrets in `.env`:
 
-| Variable                 | Used by   |
-| ------------------------ | --------- |
-| `POSTGRES_PASSWORD`      | postgres  |
-| `REDIS_PASSWORD`         | redis     |
-| `JWT_SECRET`             | auth, ai  |
-| `API_KEY`                | notification-backend |
-| `ANTHROPIC_API_KEY`      | ai-backend |
+| Variable            | Used by              |
+| ------------------- | -------------------- |
+| `POSTGRES_PASSWORD` | postgres             |
+| `REDIS_PASSWORD`    | redis                |
+| `JWT_SECRET`        | auth, ai             |
+| `API_KEY`           | notification-backend |
+| `ANTHROPIC_API_KEY` | ai-backend           |
 
 ## Development
 

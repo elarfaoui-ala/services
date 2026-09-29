@@ -6,16 +6,10 @@ import { Counter, Histogram } from 'prom-client';
 /** Replace UUIDs, numeric IDs, and other dynamic path segments with :id */
 function normalizePath(raw: string): string {
   return raw
-    .split('?')[0]                                                        // strip query string
-    .replace(
-      /\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
-      '/:id',
-    )
-    .replace(/\/\d+/g, '/:id')                                            // numeric IDs
-    .replace(
-      /\/[A-Za-z0-9_-]{20,}/g,
-      '/:id',
-    );                                                                    // long opaque slugs
+    .split('?')[0] // strip query string
+    .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id')
+    .replace(/\/\d+/g, '/:id') // numeric IDs
+    .replace(/\/[A-Za-z0-9_-]{20,}/g, '/:id'); // long opaque slugs
 }
 
 /**
@@ -59,7 +53,10 @@ export class MetricsMiddleware implements NestMiddleware {
       const status = String(res.statusCode);
 
       this.httpRequestTotal.inc({ service: this.serviceName, method, path, status });
-      this.httpRequestDuration.observe({ service: this.serviceName, method, path, status }, durationSec);
+      this.httpRequestDuration.observe(
+        { service: this.serviceName, method, path, status },
+        durationSec,
+      );
     });
 
     next();

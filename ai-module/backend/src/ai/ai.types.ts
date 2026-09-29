@@ -1,45 +1,45 @@
 export type MessageRole = 'user' | 'assistant';
 
 export interface ChatMessage {
-  id:        string;
-  role:      MessageRole;
-  content:   string;
+  id: string;
+  role: MessageRole;
+  content: string;
   createdAt: number;
-  tokens?:   number;
+  tokens?: number;
 }
 
 export interface ChatRequest {
-  messages:      { role: MessageRole; content: string }[];
+  messages: { role: MessageRole; content: string }[];
   systemPrompt?: string;
-  maxTokens?:    number;
-  model?:        string;
+  maxTokens?: number;
+  model?: string;
 }
 
 export interface SummarizeRequest {
-  text:      string;
-  mode?:     SummarizeMode;
+  text: string;
+  mode?: SummarizeMode;
   language?: string;
 }
 
 export type SummarizeMode = 'brief' | 'detailed' | 'bullets' | 'eli5';
 
 export interface SummarizeResponse {
-  summary:   string;
+  summary: string;
   wordCount: number;
-  readTime:  number;
-  tokens:    number;
+  readTime: number;
+  tokens: number;
 }
 
 export interface StreamChunk {
-  type:     'delta' | 'done' | 'error';
+  type: 'delta' | 'done' | 'error';
   content?: string;
-  error?:   string;
-  tokens?:  number;
-  usage?:   AIUsage;
+  error?: string;
+  tokens?: number;
+  usage?: AIUsage;
 }
 
 export interface AIUsage {
-  inputTokens:  number;
+  inputTokens: number;
   outputTokens: number;
-  totalTokens:  number;
+  totalTokens: number;
 }

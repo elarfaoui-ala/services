@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService }      from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
@@ -23,7 +23,9 @@ export class EmailService {
         this.transporter = nodemailer.default.createTransport({ host, port });
       }
     } catch {
-      this.logger.warn('Nodemailer not available — install with: npm install nodemailer @types/nodemailer');
+      this.logger.warn(
+        'Nodemailer not available — install with: npm install nodemailer @types/nodemailer',
+      );
       return null;
     }
     return this.transporter;

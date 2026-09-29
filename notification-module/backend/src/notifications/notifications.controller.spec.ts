@@ -18,9 +18,7 @@ describe('NotificationsController', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [NotificationsController],
-      providers: [
-        { provide: NotificationsService, useValue: mockService },
-      ],
+      providers: [{ provide: NotificationsService, useValue: mockService }],
     })
       .overrideGuard(ApiKeyGuard)
       .useValue({ canActivate: () => true })

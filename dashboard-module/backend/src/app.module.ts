@@ -2,7 +2,13 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD, APP_FILTER } from '@nestjs/core';
-import { RequestIdMiddleware, RequestLoggerMiddleware, MetricsModule, MetricsMiddleware, AllExceptionsFilter } from '@services/core';
+import {
+  RequestIdMiddleware,
+  RequestLoggerMiddleware,
+  MetricsModule,
+  MetricsMiddleware,
+  AllExceptionsFilter,
+} from '@services/core';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { HealthModule } from './health/health.module';
 
@@ -21,8 +27,6 @@ import { HealthModule } from './health/health.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(RequestIdMiddleware, MetricsMiddleware, RequestLoggerMiddleware)
-      .forRoutes('*');
+    consumer.apply(RequestIdMiddleware, MetricsMiddleware, RequestLoggerMiddleware).forRoutes('*');
   }
 }

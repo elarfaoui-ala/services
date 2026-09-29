@@ -20,28 +20,28 @@ Drop it into any project as a starting point for authentication.
 
 ## Stack
 
-| Layer      | Technology                                    |
-|------------|-----------------------------------------------|
-| Backend    | NestJS, Passport, JWT, bcryptjs               |
-| Frontend   | Next.js 14 (App Router), Tailwind             |
-| Database   | PostgreSQL 16, Drizzle ORM                    |
-| DevOps     | Docker, Docker Compose                        |
+| Layer    | Technology                        |
+| -------- | --------------------------------- |
+| Backend  | NestJS, Passport, JWT, bcryptjs   |
+| Frontend | Next.js 14 (App Router), Tailwind |
+| Database | PostgreSQL 16, Drizzle ORM        |
+| DevOps   | Docker, Docker Compose            |
 
 ## API Endpoints
 
-| Method | Path                   | Auth          | Rate        | Description                    |
-|--------|------------------------|---------------|-------------|--------------------------------|
-| POST   | /api/auth/register     | Public        | 5/min       | Create account                 |
-| POST   | /api/auth/login        | Public        | 10/min      | Login, get tokens              |
-| POST   | /api/auth/refresh      | Public        | 5/min       | Rotate refresh token           |
-| POST   | /api/auth/logout       | Bearer        | 20/min      | Revoke refresh token           |
-| GET    | /api/auth/me           | Bearer        | 20/min      | Get current user               |
-| GET    | /api/auth/admin        | Bearer+Admin  | 20/min      | Admin-only route               |
-| POST   | /api/auth/verify-email | Public        | 5/min       | Verify email with token        |
-| POST   | /api/auth/forgot-password | Public     | 3/min       | Request password reset         |
-| POST   | /api/auth/reset-password  | Public     | 5/min       | Reset password with token      |
-| GET    | /api/health            | Public        | unlimited   | Health check                   |
-| GET    | /api/docs              | Public        | unlimited   | Swagger UI (if installed)      |
+| Method | Path                      | Auth         | Rate      | Description               |
+| ------ | ------------------------- | ------------ | --------- | ------------------------- |
+| POST   | /api/auth/register        | Public       | 5/min     | Create account            |
+| POST   | /api/auth/login           | Public       | 10/min    | Login, get tokens         |
+| POST   | /api/auth/refresh         | Public       | 5/min     | Rotate refresh token      |
+| POST   | /api/auth/logout          | Bearer       | 20/min    | Revoke refresh token      |
+| GET    | /api/auth/me              | Bearer       | 20/min    | Get current user          |
+| GET    | /api/auth/admin           | Bearer+Admin | 20/min    | Admin-only route          |
+| POST   | /api/auth/verify-email    | Public       | 5/min     | Verify email with token   |
+| POST   | /api/auth/forgot-password | Public       | 3/min     | Request password reset    |
+| POST   | /api/auth/reset-password  | Public       | 5/min     | Reset password with token |
+| GET    | /api/health               | Public       | unlimited | Health check              |
+| GET    | /api/docs                 | Public       | unlimited | Swagger UI (if installed) |
 
 ## Quick Start
 
@@ -163,16 +163,16 @@ auth-module/
 
 ### Backend
 
-| Script            | Description                        |
-|-------------------|------------------------------------|
-| `npm run build`   | Compile TypeScript (tsc)           |
-| `npm run start:dev` | Run with ts-node (no build step) |
-| `npm run start:prod` | Production start                |
-| `npm run db:generate` | Generate Drizzle migrations    |
-| `npm run db:migrate`  | Run Drizzle migrations          |
-| `npm run db:setup`    | Generate + migrate              |
-| `npm run db:push`     | Push schema (dev only)          |
-| `npm test`        | Run unit tests (install Jest first) |
+| Script                | Description                         |
+| --------------------- | ----------------------------------- |
+| `npm run build`       | Compile TypeScript (tsc)            |
+| `npm run start:dev`   | Run with ts-node (no build step)    |
+| `npm run start:prod`  | Production start                    |
+| `npm run db:generate` | Generate Drizzle migrations         |
+| `npm run db:migrate`  | Run Drizzle migrations              |
+| `npm run db:setup`    | Generate + migrate                  |
+| `npm run db:push`     | Push schema (dev only)              |
+| `npm test`            | Run unit tests (install Jest first) |
 
 ## Environment Variables
 

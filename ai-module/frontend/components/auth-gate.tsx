@@ -1,11 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  AUTH_LOGOUT_EVENT,
-  hasSession,
-  login as loginRequest,
-} from '@/lib/auth';
+import { AUTH_LOGOUT_EVENT, hasSession, login as loginRequest } from '@/lib/auth';
 
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const [checking, setChecking] = useState(true);
@@ -46,8 +42,8 @@ function LoginForm({ onLoggedIn }: { onLoggedIn: () => void }) {
     try {
       await loginRequest(email, password);
       onLoggedIn();
-    } catch (err: any) {
-      setError(err.message ?? 'Sign in failed');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sign in failed');
     } finally {
       setSubmitting(false);
     }
@@ -92,9 +88,7 @@ function LoginForm({ onLoggedIn }: { onLoggedIn: () => void }) {
             />
           </div>
 
-          {error && (
-            <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
-          )}
+          {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
 
           <button
             type="submit"

@@ -1,19 +1,19 @@
 'use client';
 
-import { useState }        from 'react';
-import { useAISummarize }  from '../../lib/use-ai-summarize';
-import { SummarizeMode }   from '../../lib/ai.types';
+import { useState } from 'react';
+import { useAISummarize } from '../../lib/use-ai-summarize';
+import { SummarizeMode } from '../../lib/ai.types';
 
 const MODES: { label: string; value: SummarizeMode; desc: string }[] = [
-  { label: 'Brief',    value: 'brief',    desc: '2-3 sentence summary'     },
-  { label: 'Detailed', value: 'detailed', desc: 'Comprehensive overview'    },
-  { label: 'Bullets',  value: 'bullets',  desc: 'Key points as bullet list' },
-  { label: 'ELI5',     value: 'eli5',     desc: 'Simple language, no jargon'},
+  { label: 'Brief', value: 'brief', desc: '2-3 sentence summary' },
+  { label: 'Detailed', value: 'detailed', desc: 'Comprehensive overview' },
+  { label: 'Bullets', value: 'bullets', desc: 'Key points as bullet list' },
+  { label: 'ELI5', value: 'eli5', desc: 'Simple language, no jargon' },
 ];
 
 export function DocumentSummarizer() {
-  const [text, setText]   = useState('');
-  const [mode, setMode]   = useState<SummarizeMode>('brief');
+  const [text, setText] = useState('');
+  const [mode, setMode] = useState<SummarizeMode>('brief');
   const { result, isLoading, error, summarize, reset } = useAISummarize();
 
   function handleSubmit() {
@@ -30,9 +30,8 @@ export function DocumentSummarizer() {
 
   return (
     <div className="space-y-4">
-
       <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Summary mode">
-        {MODES.map(m => (
+        {MODES.map((m) => (
           <button
             key={m.value}
             onClick={() => setMode(m.value)}
@@ -40,9 +39,11 @@ export function DocumentSummarizer() {
             aria-checked={mode === m.value}
             aria-label={m.desc}
             className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-all
-              ${mode === m.value
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500'}`}
+              ${
+                mode === m.value
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500'
+              }`}
           >
             {m.label}
           </button>
@@ -52,7 +53,10 @@ export function DocumentSummarizer() {
       <div className="relative">
         <textarea
           value={text}
-          onChange={e => { setText(e.target.value); if (result) reset(); }}
+          onChange={(e) => {
+            setText(e.target.value);
+            if (result) reset();
+          }}
           placeholder="Paste your text here — article, document, report, code comments…"
           rows={8}
           aria-label="Text to summarize"
@@ -88,7 +92,10 @@ export function DocumentSummarizer() {
       </div>
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl" role="alert">
+        <div
+          className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm px-4 py-3 rounded-xl"
+          role="alert"
+        >
           {error}
         </div>
       )}
@@ -119,7 +126,10 @@ export function DocumentSummarizer() {
       )}
 
       {isLoading && (
-        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 space-y-3 animate-pulse" aria-label="Loading summary">
+        <div
+          className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 space-y-3 animate-pulse"
+          aria-label="Loading summary"
+        >
           <div className="h-4 bg-gray-100 dark:bg-gray-700 rounded w-24" />
           <div className="space-y-2">
             <div className="h-3 bg-gray-100 dark:bg-gray-700 rounded w-full" />

@@ -1,25 +1,32 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DashboardService }   from './dashboard.service';
-import { DataProvider }       from '../data/data-provider.interface';
-import { DATA_PROVIDER }     from '../data/data-provider.token';
-import { DashboardData }      from './dashboard.types';
+import { DashboardService } from './dashboard.service';
+import { DataProvider } from '../data/data-provider.interface';
+import { DATA_PROVIDER } from '../data/data-provider.token';
+import { DashboardData } from './dashboard.types';
 
 describe('DashboardService', () => {
   let service: DashboardService;
   let provider: DataProvider;
 
   const mockData: DashboardData = {
-    kpis:      [{ id: 'revenue', label: 'Revenue', value: 1000, change: 10, trend: 'up' }],
-    charts:    [],
+    kpis: [{ id: 'revenue', label: 'Revenue', value: 1000, change: 10, trend: 'up' }],
+    charts: [],
     updatedAt: new Date().toISOString(),
-    period:    { from: '2024-01-01', to: '2024-01-31' },
+    period: { from: '2024-01-01', to: '2024-01-31' },
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DashboardService,
-        { provide: DATA_PROVIDER, useValue: { getDashboardData: jest.fn().mockReturnValue(mockData), getKpis: jest.fn().mockReturnValue(mockData.kpis), getCharts: jest.fn().mockReturnValue(mockData.charts) } },
+        {
+          provide: DATA_PROVIDER,
+          useValue: {
+            getDashboardData: jest.fn().mockReturnValue(mockData),
+            getKpis: jest.fn().mockReturnValue(mockData.kpis),
+            getCharts: jest.fn().mockReturnValue(mockData.charts),
+          },
+        },
       ],
     }).compile();
 

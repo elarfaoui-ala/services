@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter }         from 'next/font/google';
-import { AuthGate }      from '@/components/auth-gate';
+import { Inter } from 'next/font/google';
+import { AuthGate } from '@/components/auth-gate';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title:       'AI Module',
+  title: 'AI Module',
   description: 'Claude API — streaming chat and document summarizer',
 };
 
@@ -28,7 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={`${inter.className} bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased`}>
+      <body
+        className={`${inter.className} bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased`}
+      >
         <AuthGate>{children}</AuthGate>
       </body>
     </html>

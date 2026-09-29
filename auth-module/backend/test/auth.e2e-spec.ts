@@ -52,10 +52,7 @@ describe('Auth (e2e)', () => {
 
   describe('/api/auth/login (POST)', () => {
     it('should reject login with missing fields', () => {
-      return request(app.getHttpServer())
-        .post('/api/auth/login')
-        .send({})
-        .expect(400);
+      return request(app.getHttpServer()).post('/api/auth/login').send({}).expect(400);
     });
   });
 });

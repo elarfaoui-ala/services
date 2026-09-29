@@ -1,9 +1,9 @@
 'use client';
 
 interface DashboardHeaderProps {
-  lastUpdated:  Date | null;
+  lastUpdated: Date | null;
   isRefreshing: boolean;
-  onRefresh:    () => void;
+  onRefresh: () => void;
 }
 
 export function DashboardHeader({ lastUpdated, isRefreshing, onRefresh }: DashboardHeaderProps) {
@@ -12,9 +12,7 @@ export function DashboardHeader({ lastUpdated, isRefreshing, onRefresh }: Dashbo
       <div>
         <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
         {lastUpdated && (
-          <p className="text-xs text-gray-400 mt-0.5">
-            Updated {lastUpdated.toLocaleTimeString()}
-          </p>
+          <p className="text-xs text-gray-400 mt-0.5">Updated {lastUpdated.toLocaleTimeString()}</p>
         )}
       </div>
       <button

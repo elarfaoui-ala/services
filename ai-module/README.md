@@ -16,11 +16,11 @@ Powered by the Claude API with real-time streaming.
 
 ## Stack
 
-| Layer    | Technology                              |
-|----------|-----------------------------------------|
-| Backend  | NestJS, Anthropic SDK, SSE streaming    |
-| Frontend | Next.js 14, Tailwind CSS                |
-| AI       | Claude claude-sonnet-4-6                        |
+| Layer    | Technology                           |
+| -------- | ------------------------------------ |
+| Backend  | NestJS, Anthropic SDK, SSE streaming |
+| Frontend | Next.js 14, Tailwind CSS             |
+| AI       | Claude claude-sonnet-4-6             |
 
 ## Quick Start
 
@@ -38,16 +38,17 @@ npm install && npm run dev
 ```
 
 Open:
+
 - http://localhost:3000/chat — streaming chat interface
 - http://localhost:3000/summarize — document summarizer
 
 ## API Endpoints
 
-| Method | Path                  | Description                     |
-|--------|-----------------------|---------------------------------|
-| POST   | /api/ai/chat/stream   | SSE streaming chat              |
-| POST   | /api/ai/summarize     | Document summarization          |
-| POST   | /api/ai/complete      | One-shot completion             |
+| Method | Path                | Description            |
+| ------ | ------------------- | ---------------------- |
+| POST   | /api/ai/chat/stream | SSE streaming chat     |
+| POST   | /api/ai/summarize   | Document summarization |
+| POST   | /api/ai/complete    | One-shot completion    |
 
 ## Hook Usage
 
@@ -56,7 +57,7 @@ Open:
 ```tsx
 const { messages, isStreaming, send, stop, clear, totalTokens } = useAIChat({
   systemPrompt: 'You are a helpful assistant specialized in cooking.',
-  maxTokens:    1024,
+  maxTokens: 1024,
 });
 
 // Send a message
@@ -76,10 +77,10 @@ const { result, isLoading, error, summarize, reset } = useAISummarize();
 
 await summarize(longText, 'bullets');
 
-console.log(result.summary);    // bullet point summary
-console.log(result.wordCount);  // original word count
-console.log(result.readTime);   // estimated read time in minutes
-console.log(result.tokens);     // Claude tokens used
+console.log(result.summary); // bullet point summary
+console.log(result.wordCount); // original word count
+console.log(result.readTime); // estimated read time in minutes
+console.log(result.tokens); // Claude tokens used
 ```
 
 ## Integrating into an existing NestJS project
@@ -112,7 +113,7 @@ export class YourService {
 <ChatInterface
   title="Support Assistant"
   systemPrompt="You are a customer support agent for Acme Corp."
-/>
+/>;
 
 // Or use the hooks directly for custom UI
 const { send, messages, isStreaming } = useAIChat({

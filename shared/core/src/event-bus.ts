@@ -48,9 +48,7 @@ export class EventBus implements OnModuleDestroy {
 
         try {
           const payload: EventPayload = JSON.parse(message);
-          await Promise.allSettled(
-            Array.from(handlers).map((handler) => handler(payload.data)),
-          );
+          await Promise.allSettled(Array.from(handlers).map((handler) => handler(payload.data)));
         } catch (err) {
           this.logger.error(`Failed to process event ${channel}: ${err}`);
         }

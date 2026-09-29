@@ -20,12 +20,12 @@ Plug it into any project — swap the data source and the charts work instantly.
 
 ## Stack
 
-| Layer      | Technology                                              |
-|------------|---------------------------------------------------------|
-| Backend    | NestJS, TypeScript, Helmet, class-validator, Throttler  |
-| Frontend   | Next.js 14, Recharts, Tailwind CSS                      |
-| Shared     | `@dashboard-module/shared` (npm workspace)              |
-| Infra      | Docker, docker-compose                                  |
+| Layer    | Technology                                             |
+| -------- | ------------------------------------------------------ |
+| Backend  | NestJS, TypeScript, Helmet, class-validator, Throttler |
+| Frontend | Next.js 14, Recharts, Tailwind CSS                     |
+| Shared   | `@dashboard-module/shared` (npm workspace)             |
+| Infra    | Docker, docker-compose                                 |
 
 ## Quick Start
 
@@ -43,11 +43,11 @@ npm run dev -w frontend  # http://localhost:3000/dashboard
 
 ## API Endpoints
 
-| Method | Path                        | Description              |
-|--------|-----------------------------|--------------------------|
-| GET    | /api/dashboard?range=30d    | Full dashboard data      |
-| GET    | /api/dashboard/kpis?range=7d| KPI cards only           |
-| GET    | /api/dashboard/charts       | Charts only              |
+| Method | Path                         | Description         |
+| ------ | ---------------------------- | ------------------- |
+| GET    | /api/dashboard?range=30d     | Full dashboard data |
+| GET    | /api/dashboard/kpis?range=7d | KPI cards only      |
+| GET    | /api/dashboard/charts        | Charts only         |
 
 **Query params:** `range` (today\|7d\|30d\|90d\|custom), `from` (ISO date), `to` (ISO date)
 
@@ -136,15 +136,17 @@ docker compose up --build
 ## Environment Variables
 
 ### Backend
-| Variable       | Default                  | Description        |
-|----------------|--------------------------|--------------------|
-| `PORT`         | `4002`                   | API port           |
-| `FRONTEND_URL` | `http://localhost:3000`   | CORS origin        |
+
+| Variable       | Default                 | Description |
+| -------------- | ----------------------- | ----------- |
+| `PORT`         | `4002`                  | API port    |
+| `FRONTEND_URL` | `http://localhost:3000` | CORS origin |
 
 ### Frontend
-| Variable               | Default                       | Description       |
-|------------------------|-------------------------------|-------------------|
-| `NEXT_PUBLIC_API_URL`  | `http://localhost:4002/api`   | Backend API URL   |
+
+| Variable              | Default                     | Description     |
+| --------------------- | --------------------------- | --------------- |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:4002/api` | Backend API URL |
 
 ## Project Structure
 

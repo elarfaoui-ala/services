@@ -21,12 +21,12 @@ Plug into any project with two lines of code.
 
 ## Stack
 
-| Layer    | Technology                              |
-|----------|----------------------------------------|
-| Backend  | NestJS, Socket.IO, WebSocket Gateway   |
-| Frontend | Next.js 14, React, socket.io-client    |
-| Styling  | Tailwind CSS                           |
-| Testing  | Jest                                   |
+| Layer    | Technology                           |
+| -------- | ------------------------------------ |
+| Backend  | NestJS, Socket.IO, WebSocket Gateway |
+| Frontend | Next.js 14, React, socket.io-client  |
+| Styling  | Tailwind CSS                         |
+| Testing  | Jest                                 |
 
 ## Quick Start
 
@@ -67,15 +67,15 @@ dismissAll();
 
 ## API Endpoints
 
-| Method | Path                              | Description                  |
-|--------|-----------------------------------|------------------------------|
-| POST   | /api/notifications/broadcast      | Send to all clients          |
-| POST   | /api/notifications/user/:userId   | Send to specific user        |
-| POST   | /api/notifications/health         | Health check                 |
-| POST   | /api/notifications/test/success   | Test success notification    |
-| POST   | /api/notifications/test/error     | Test error notification      |
-| POST   | /api/notifications/test/warning   | Test warning notification    |
-| POST   | /api/notifications/test/info      | Test info notification       |
+| Method | Path                            | Description               |
+| ------ | ------------------------------- | ------------------------- |
+| POST   | /api/notifications/broadcast    | Send to all clients       |
+| POST   | /api/notifications/user/:userId | Send to specific user     |
+| POST   | /api/notifications/health       | Health check              |
+| POST   | /api/notifications/test/success | Test success notification |
+| POST   | /api/notifications/test/error   | Test error notification   |
+| POST   | /api/notifications/test/warning | Test warning notification |
+| POST   | /api/notifications/test/info    | Test info notification    |
 
 > **Auth:** Set `API_KEY` in `.env` to require `x-api-key` header on `broadcast` and `user/:userId` endpoints.
 
@@ -116,16 +116,18 @@ docker compose up --build
 ## Scripts
 
 ### Backend
-| Script         | Description          |
-|---------------|----------------------|
+
+| Script              | Description        |
+| ------------------- | ------------------ |
 | `npm run start:dev` | Dev server (watch) |
 | `npm run build`     | Compile            |
 | `npm run test`      | Run unit tests     |
 | `npm run lint`      | Lint & fix         |
 
 ### Frontend
-| Script     | Description       |
-|-----------|-------------------|
+
+| Script          | Description      |
+| --------------- | ---------------- |
 | `npm run dev`   | Dev server       |
 | `npm run build` | Production build |
 | `npm run lint`  | Lint             |

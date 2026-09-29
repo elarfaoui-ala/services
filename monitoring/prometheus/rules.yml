@@ -8,8 +8,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "{{ $labels.job }} is down"
-          description: "{{ $labels.instance }} has been unreachable for 30s."
+          summary: '{{ $labels.job }} is down'
+          description: '{{ $labels.instance }} has been unreachable for 30s.'
 
       - alert: HighErrorRate
         expr: >
@@ -20,8 +20,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High error rate on {{ $labels.service }}"
-          description: "{{ $labels.service }} error rate is {{ $value | humanizePercentage }} (threshold: 5%)."
+          summary: 'High error rate on {{ $labels.service }}'
+          description: '{{ $labels.service }} error rate is {{ $value | humanizePercentage }} (threshold: 5%).'
 
       - alert: SustainedHighErrorRate
         expr: >
@@ -32,8 +32,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Critical error rate on {{ $labels.service }}"
-          description: "{{ $labels.service }} 5xx rate is {{ $value | humanizePercentage }} (threshold: 10%)."
+          summary: 'Critical error rate on {{ $labels.service }}'
+          description: '{{ $labels.service }} 5xx rate is {{ $value | humanizePercentage }} (threshold: 10%).'
 
   # ── Latency ──────────────────────────────────────────────────────────────────
   - name: latency
@@ -46,8 +46,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High P99 latency on {{ $labels.service }}"
-          description: "{{ $labels.service }} P99 latency is {{ $value | humanizeDuration }} (threshold: 2s)."
+          summary: 'High P99 latency on {{ $labels.service }}'
+          description: '{{ $labels.service }} P99 latency is {{ $value | humanizeDuration }} (threshold: 2s).'
 
       - alert: HighP50Latency
         expr: >
@@ -57,8 +57,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Elevated median latency on {{ $labels.service }}"
-          description: "{{ $labels.service }} P50 latency is {{ $value | humanizeDuration }} (threshold: 1s)."
+          summary: 'Elevated median latency on {{ $labels.service }}'
+          description: '{{ $labels.service }} P50 latency is {{ $value | humanizeDuration }} (threshold: 1s).'
 
   # ── Infrastructure ───────────────────────────────────────────────────────────
   - name: infrastructure
@@ -70,8 +70,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High memory on {{ $labels.service }}"
-          description: "{{ $labels.service }} using {{ $value | humanize1024 }}B of memory (threshold: 512MB)."
+          summary: 'High memory on {{ $labels.service }}'
+          description: '{{ $labels.service }} using {{ $value | humanize1024 }}B of memory (threshold: 512MB).'
 
       - alert: HighFileDescriptors
         expr: process_open_fds / process_max_fds > 0.8
@@ -79,8 +79,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "File descriptor exhaustion on {{ $labels.service }}"
-          description: "{{ $labels.service }} using {{ $value | humanizePercentage }} of file descriptors."
+          summary: 'File descriptor exhaustion on {{ $labels.service }}'
+          description: '{{ $labels.service }} using {{ $value | humanizePercentage }} of file descriptors.'
 
       - alert: NginxConnectionsSaturated
         expr: nginx_connections_active > 900
@@ -88,5 +88,5 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Nginx connections nearly saturated"
-          description: "Active connections: {{ $value }} (threshold: 900, max worker_connections: 1024)."
+          summary: 'Nginx connections nearly saturated'
+          description: 'Active connections: {{ $value }} (threshold: 900, max worker_connections: 1024).'

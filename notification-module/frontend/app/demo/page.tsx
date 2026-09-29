@@ -8,7 +8,6 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="w-full max-w-lg space-y-6">
-
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Notification Module</h1>
@@ -27,13 +26,22 @@ export default function DemoPage() {
           </h2>
           <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={() => add({ type: 'success', title: 'Success!', message: 'Operation completed.' })}
+              onClick={() =>
+                add({ type: 'success', title: 'Success!', message: 'Operation completed.' })
+              }
               className="py-2 px-3 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Success
             </button>
             <button
-              onClick={() => add({ type: 'error', title: 'Error!', message: 'Something went wrong.', duration: 0 })}
+              onClick={() =>
+                add({
+                  type: 'error',
+                  title: 'Error!',
+                  message: 'Something went wrong.',
+                  duration: 0,
+                })
+              }
               className="py-2 px-3 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Error (persistent)
@@ -60,14 +68,23 @@ export default function DemoPage() {
           </h2>
           <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={() => emit({ type: 'success', title: 'Broadcast!', message: 'Sent to all clients.' })}
+              onClick={() =>
+                emit({ type: 'success', title: 'Broadcast!', message: 'Sent to all clients.' })
+              }
               disabled={!connected}
               className="py-2 px-3 bg-green-500 hover:bg-green-600 disabled:opacity-40 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Broadcast success
             </button>
             <button
-              onClick={() => emit({ type: 'error', title: 'System error', message: 'Critical issue detected.', duration: 0 })}
+              onClick={() =>
+                emit({
+                  type: 'error',
+                  title: 'System error',
+                  message: 'Critical issue detected.',
+                  duration: 0,
+                })
+              }
               disabled={!connected}
               className="py-2 px-3 bg-red-500 hover:bg-red-600 disabled:opacity-40 text-white text-sm font-medium rounded-lg transition-colors"
             >
@@ -75,7 +92,9 @@ export default function DemoPage() {
             </button>
           </div>
           {!connected && (
-            <p className="text-xs text-red-500">Start the backend to enable WebSocket broadcasts.</p>
+            <p className="text-xs text-red-500">
+              Start the backend to enable WebSocket broadcasts.
+            </p>
           )}
         </div>
 
@@ -93,9 +112,18 @@ export default function DemoPage() {
         {/* Usage code snippet */}
         <div className="bg-gray-900 rounded-xl p-4 text-xs text-gray-300 font-mono leading-relaxed">
           <p className="text-gray-500 mb-2">// Usage in any component:</p>
-          <p><span className="text-blue-400">const</span> {'{ add, emit } = '}<span className="text-yellow-400">useNotifications</span>()</p>
-          <p className="mt-1"><span className="text-blue-400">add</span>{'({ type: "success", title: "Done!" })'}</p>
-          <p><span className="text-blue-400">emit</span>{'({ type: "info", title: "For all!" })'}</p>
+          <p>
+            <span className="text-blue-400">const</span> {'{ add, emit } = '}
+            <span className="text-yellow-400">useNotifications</span>()
+          </p>
+          <p className="mt-1">
+            <span className="text-blue-400">add</span>
+            {'({ type: "success", title: "Done!" })'}
+          </p>
+          <p>
+            <span className="text-blue-400">emit</span>
+            {'({ type: "info", title: "For all!" })'}
+          </p>
         </div>
       </div>
     </main>

@@ -4,17 +4,20 @@ const config = {
   roots: ['<rootDir>/src'],
   testRegex: '.*\\.spec\\.ts$',
   transform: {
-    '^.+\\.(t|j)s$': ['@swc/jest', {
-      jsc: {
-        parser: {
-          syntax: 'typescript',
-          decorators: true,
-        },
-        transform: {
-          decoratorMetadata: true,
+    '^.+\\.(t|j)s$': [
+      '@swc/jest',
+      {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            decorators: true,
+          },
+          transform: {
+            decoratorMetadata: true,
+          },
         },
       },
-    }],
+    ],
   },
   collectCoverageFrom: ['src/**/*.(t|j)s'],
   testEnvironment: 'node',

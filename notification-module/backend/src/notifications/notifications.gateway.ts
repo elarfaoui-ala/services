@@ -8,24 +8,16 @@ import {
   MessageBody,
   ConnectedSocket,
 } from '@nestjs/websockets';
-import { UseFilters }     from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { Logger }         from '@nestjs/common';
-import {
-  Notification,
-  EmitNotificationDto,
-  WS_EVENTS,
-} from './notification.types';
+import { Logger } from '@nestjs/common';
+import { Notification, EmitNotificationDto, WS_EVENTS } from './notification.types';
 import { WebSocketExceptionFilter } from './filters/ws-exception.filter';
 
 @UseFilters(WebSocketExceptionFilter)
 @WebSocketGateway({
   cors: {
-    origin: (
-      process.env.CORS_ORIGINS ??
-      process.env.FRONTEND_URL ??
-      'http://localhost:3000'
-    )
+    origin: (process.env.CORS_ORIGINS ?? process.env.FRONTEND_URL ?? 'http://localhost:3000')
       .split(',')
       .map((o) => o.trim())
       .filter(Boolean),
@@ -61,20 +53,14 @@ export class NotificationsGateway
   }
 
   @SubscribeMessage(WS_EVENTS.JOIN_ROOM)
-  handleJoinRoom(
-    @MessageBody() roomId: string,
-    @ConnectedSocket() client: Socket,
-  ) {
+  handleJoinRoom(@MessageBody() roomId: string, @ConnectedSocket() client: Socket) {
     client.join(roomId);
     this.logger.log(`Client ${client.id} joined room: ${roomId}`);
     return { success: true, room: roomId };
   }
 
   @SubscribeMessage(WS_EVENTS.LEAVE_ROOM)
-  handleLeaveRoom(
-    @MessageBody() roomId: string,
-    @ConnectedSocket() client: Socket,
-  ) {
+  handleLeaveRoom(@MessageBody() roomId: string, @ConnectedSocket() client: Socket) {
     client.leave(roomId);
     return { success: true, room: roomId };
   }
@@ -107,11 +93,11 @@ export class NotificationsGateway
 
   private buildNotification(dto: EmitNotificationDto): Notification {
     return {
-      id:        crypto.randomUUID(),
-      type:      dto.type,
-      title:     dto.title,
-      message:   dto.message,
-      duration:  dto.duration ?? 4000,
+      id: crypto.randomUUID(),
+      type: dto.type,
+      title: dto.title,
+      message: dto.message,
+      duration: dto.duration ?? 4000,
       createdAt: Date.now(),
     };
   }

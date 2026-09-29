@@ -2,22 +2,22 @@
 
 import { useState, useCallback } from 'react';
 import { SummarizeMode, SummarizeResponse } from './ai.types';
-import { authorizedFetch }                   from './auth';
+import { authorizedFetch } from './auth';
 
 const API = process.env.NEXT_PUBLIC_AI_API_URL ?? 'http://localhost:4003/api';
 
 interface UseAISummarizeReturn {
-  result:     SummarizeResponse | null;
-  isLoading:  boolean;
-  error:      string | null;
-  summarize:  (text: string, mode?: SummarizeMode) => Promise<void>;
-  reset:      () => void;
+  result: SummarizeResponse | null;
+  isLoading: boolean;
+  error: string | null;
+  summarize: (text: string, mode?: SummarizeMode) => Promise<void>;
+  reset: () => void;
 }
 
 export function useAISummarize(): UseAISummarizeReturn {
-  const [result,    setResult]    = useState<SummarizeResponse | null>(null);
+  const [result, setResult] = useState<SummarizeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error,     setError]     = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const summarize = useCallback(async (text: string, mode: SummarizeMode = 'brief') => {
     if (!text.trim()) return;
@@ -27,9 +27,9 @@ export function useAISummarize(): UseAISummarizeReturn {
 
     try {
       const res = await authorizedFetch(`${API}/ai/summarize`, {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ text, mode }),
+        body: JSON.stringify({ text, mode }),
       });
       if (!res.ok) {
         if (res.status === 401) throw new Error('Session expired — please sign in again');

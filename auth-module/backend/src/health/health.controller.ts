@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
-import { SkipThrottle }    from '@nestjs/throttler';
-import { Pool }            from 'pg';
-import { ConfigService }   from '@nestjs/config';
+import { SkipThrottle } from '@nestjs/throttler';
+import { Pool } from 'pg';
+import { ConfigService } from '@nestjs/config';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('Health')
@@ -16,7 +16,11 @@ export class HealthController {
   async check() {
     let dbStatus = 'unknown';
     try {
-      const pool = new Pool({ connectionString: this.config.get('DATABASE_URL'), max: 1, connectionTimeoutMillis: 3000 });
+      const pool = new Pool({
+        connectionString: this.config.get('DATABASE_URL'),
+        max: 1,
+        connectionTimeoutMillis: 3000,
+      });
       const client = await pool.connect();
       await client.query('SELECT 1');
       client.release();

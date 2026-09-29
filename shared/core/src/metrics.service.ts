@@ -24,9 +24,7 @@ export class MetricsService {
 
     collectDefaultMetrics({
       register: this.registry,
-      prefix: process.env.SERVICE_NAME
-        ? `${process.env.SERVICE_NAME.replace(/-/g, '_')}_`
-        : '',
+      prefix: process.env.SERVICE_NAME ? `${process.env.SERVICE_NAME.replace(/-/g, '_')}_` : '',
     });
   }
 

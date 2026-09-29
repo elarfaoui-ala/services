@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER:     ${POSTGRES_USER:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
-      POSTGRES_DB:       ${POSTGRES_DB:-auth_module}
+      POSTGRES_DB: ${POSTGRES_DB:-auth_module}
     ports:
       - '${POSTGRES_PORT:-5432}:5432'
     volumes:
@@ -22,10 +22,10 @@ services:
       dockerfile: auth-module/backend/Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL:  postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-auth_module}
-      JWT_SECRET:    ${JWT_SECRET:?Set JWT_SECRET in .env}
-      PORT:          ${AUTH_PORT:-4000}
-      FRONTEND_URL:  ${FRONTEND_URL:-http://localhost:3000}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-auth_module}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      PORT: ${AUTH_PORT:-4000}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
     ports:
       - '${AUTH_PORT:-4000}:4000'
     depends_on:

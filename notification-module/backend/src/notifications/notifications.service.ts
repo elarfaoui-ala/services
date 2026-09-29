@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { NotificationsGateway } from './notifications.gateway';
-import { EmitNotificationDto }  from './notification.types';
+import { EmitNotificationDto } from './notification.types';
 
 @Injectable()
 export class NotificationsService {
   constructor(private readonly gateway: NotificationsGateway) {}
 
-  private send(type: EmitNotificationDto['type'], title: string, message?: string, opts?: Partial<EmitNotificationDto>) {
+  private send(
+    type: EmitNotificationDto['type'],
+    title: string,
+    message?: string,
+    opts?: Partial<EmitNotificationDto>,
+  ) {
     const dto: EmitNotificationDto = { type, title, message, ...opts };
     return this.gateway.broadcast(dto);
   }

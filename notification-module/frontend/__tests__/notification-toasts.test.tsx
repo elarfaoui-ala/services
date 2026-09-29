@@ -1,6 +1,3 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-
 // Mock socket.io-client
 jest.mock('socket.io-client', () => ({
   io: jest.fn(() => ({

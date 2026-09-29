@@ -1,30 +1,28 @@
 'use client';
 
-import {
-  createContext, useContext, useEffect, useState, useCallback, ReactNode,
-} from 'react';
-import { authApi, User, AuthTokens } from './auth-api';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { authApi, User } from './auth-api';
 
 interface AuthState {
-  user:         User | null;
-  accessToken:  string | null;
+  user: User | null;
+  accessToken: string | null;
   refreshToken: string | null;
-  isLoading:    boolean;
+  isLoading: boolean;
 }
 
 interface AuthContext extends AuthState {
-  login:    (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
-  logout:   () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-const TOKEN_KEY   = 'auth_access_token';
+const TOKEN_KEY = 'auth_access_token';
 const REFRESH_KEY = 'auth_refresh_token';
 
 function getTokens(): { accessToken: string | null; refreshToken: string | null } {
   if (typeof window === 'undefined') return { accessToken: null, refreshToken: null };
   return {
-    accessToken:  localStorage.getItem(TOKEN_KEY),
+    accessToken: localStorage.getItem(TOKEN_KEY),
     refreshToken: localStorage.getItem(REFRESH_KEY),
   };
 }
@@ -43,10 +41,16 @@ const Ctx = createContext<AuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({
-    user: null, accessToken: null, refreshToken: null, isLoading: true,
+    user: null,
+    accessToken: null,
+    refreshToken: null,
+    isLoading: true,
   });
 
-  const tryRefresh = useCallback(async (): Promise<{ accessToken: string; refreshToken: string } | null> => {
+  const tryRefresh = useCallback(async (): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  } | null> => {
     const { refreshToken } = getTokens();
     if (!refreshToken) return null;
     try {
@@ -61,15 +65,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const { accessToken, refreshToken } = getTokens();
     if (!accessToken || !refreshToken) {
-      setState(s => ({ ...s, isLoading: false }));
+      setState((s) => ({ ...s, isLoading: false }));
       return;
     }
-    authApi.me(accessToken)
+    authApi
+      .me(accessToken)
       .then(({ user }) => setState({ user, accessToken, refreshToken, isLoading: false }))
       .catch(async () => {
         const tokens = await tryRefresh();
         if (tokens) {
-          authApi.me(tokens.accessToken)
+          authApi
+            .me(tokens.accessToken)
             .then(({ user }) => setState({ user, ...tokens, isLoading: false }))
             .catch(() => {
               clearTokens();
@@ -87,15 +93,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ user, accessToken, refreshToken, isLoading: false });
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const res = await authApi.login({ email, password });
-    persist(res.accessToken, res.refreshToken, res.user);
-  }, [persist]);
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const res = await authApi.login({ email, password });
+      persist(res.accessToken, res.refreshToken, res.user);
+    },
+    [persist],
+  );
 
-  const register = useCallback(async (email: string, password: string, name: string) => {
-    const res = await authApi.register({ email, password, name });
-    persist(res.accessToken, res.refreshToken, res.user);
-  }, [persist]);
+  const register = useCallback(
+    async (email: string, password: string, name: string) => {
+      const res = await authApi.register({ email, password, name });
+      persist(res.accessToken, res.refreshToken, res.user);
+    },
+    [persist],
+  );
 
   const logout = useCallback(async () => {
     const { accessToken, refreshToken } = getTokens();
@@ -106,11 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setState({ user: null, accessToken: null, refreshToken: null, isLoading: false });
   }, []);
 
-  return (
-    <Ctx.Provider value={{ ...state, login, register, logout }}>
-      {children}
-    </Ctx.Provider>
-  );
+  return <Ctx.Provider value={{ ...state, login, register, logout }}>{children}</Ctx.Provider>;
 }
 
 export function useAuth() {

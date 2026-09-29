@@ -136,15 +136,13 @@ describe('EventBus', () => {
         source: 'auth-service',
       };
 
-      await expect(
-        messageHandler('user.created', JSON.stringify(payload)),
-      ).resolves.not.toThrow();
+      await expect(messageHandler('user.created', JSON.stringify(payload))).resolves.not.toThrow();
     });
 
     it('should handle async handlers', async () => {
-      const asyncHandler = jest.fn().mockImplementation(
-        () => new Promise((resolve) => setTimeout(resolve, 10)),
-      );
+      const asyncHandler = jest
+        .fn()
+        .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 10)));
       await eventBus.subscribe('user.created', asyncHandler);
 
       const messageHandler = mockRedis.on.mock.calls[0][1];
@@ -170,9 +168,7 @@ describe('EventBus', () => {
         source: 'test',
       };
 
-      await expect(
-        messageHandler('event.b', JSON.stringify(payload)),
-      ).resolves.not.toThrow();
+      await expect(messageHandler('event.b', JSON.stringify(payload))).resolves.not.toThrow();
     });
   });
 

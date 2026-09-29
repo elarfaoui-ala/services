@@ -1,9 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  WsExceptionFilter,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, WsExceptionFilter } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 
 @Catch(WsException)

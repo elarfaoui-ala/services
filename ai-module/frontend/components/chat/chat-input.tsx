@@ -3,15 +3,15 @@
 import { useState, KeyboardEvent, useRef, useEffect } from 'react';
 
 interface ChatInputProps {
-  onSend:      (message: string) => void;
-  onStop:      () => void;
+  onSend: (message: string) => void;
+  onStop: () => void;
   isStreaming: boolean;
-  disabled?:   boolean;
+  disabled?: boolean;
 }
 
 export function ChatInput({ onSend, onStop, isStreaming, disabled }: ChatInputProps) {
-  const [value,  setValue]  = useState('');
-  const textareaRef         = useRef<HTMLTextAreaElement>(null);
+  const [value, setValue] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (!isStreaming && textareaRef.current) textareaRef.current.focus();
@@ -43,7 +43,7 @@ export function ChatInput({ onSend, onStop, isStreaming, disabled }: ChatInputPr
       <textarea
         ref={textareaRef}
         value={value}
-        onChange={e => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
         onInput={handleInput}
         disabled={isStreaming || disabled}

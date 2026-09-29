@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool }    from 'pg';
+import { Pool } from 'pg';
 import * as dotenv from 'dotenv';
 import * as schema from './schema';
 
@@ -10,4 +10,4 @@ const pool = new Pool({
 });
 
 export const db = drizzle(pool, { schema });
-export type DB   = typeof db;
+export type DB = typeof db;

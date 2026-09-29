@@ -1,24 +1,32 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { ConfigService }                   from '@nestjs/config';
-import Anthropic                            from '@anthropic-ai/sdk';
-import { Response }                         from 'express';
+import { ConfigService } from '@nestjs/config';
+import Anthropic from '@anthropic-ai/sdk';
+import { Response } from 'express';
 import {
-  ChatRequest, SummarizeRequest,
-  SummarizeResponse, StreamChunk, SummarizeMode, AIUsage,
+  ChatRequest,
+  SummarizeRequest,
+  SummarizeResponse,
+  StreamChunk,
+  SummarizeMode,
+  AIUsage,
 } from './ai.types';
 import { ChatRequestDto, SummarizeRequestDto } from './ai.dto';
 
 const DEFAULT_MAX_TOKENS = 1024;
 
 const SUMMARIZE_PROMPTS: Record<SummarizeMode, string> = {
-  brief:    'Summarize the following text in 2-3 sentences. Be concise and capture the key point.',
-  detailed: 'Provide a comprehensive summary of the following text. Cover all main points and key details.',
-  bullets:  'Summarize the following text as a bullet-point list. Each bullet should be one clear insight.',
-  eli5:     'Explain the following text as if explaining to a 10-year-old. Use simple language and analogies.',
+  brief: 'Summarize the following text in 2-3 sentences. Be concise and capture the key point.',
+  detailed:
+    'Provide a comprehensive summary of the following text. Cover all main points and key details.',
+  bullets:
+    'Summarize the following text as a bullet-point list. Each bullet should be one clear insight.',
+  eli5: 'Explain the following text as if explaining to a 10-year-old. Use simple language and analogies.',
 };
 
 function getTextContent(content: Anthropic.Messages.ContentBlock[]): string {
-  const block = content.find((b): b is { type: 'text'; text: string } => b.type === 'text');
+  const block = content.find(
+    (b): b is Extract<Anthropic.Messages.ContentBlock, { type: 'text' }> => b.type === 'text',
+  );
   return block?.text ?? '';
 }
 
@@ -41,10 +49,13 @@ export class AiService {
       throw new BadRequestException('Messages array is required');
     }
 
-    res.setHeader('Content-Type',                'text/event-stream');
-    res.setHeader('Cache-Control',               'no-cache');
-    res.setHeader('Connection',                  'keep-alive');
-    res.setHeader('Access-Control-Allow-Origin', this.config.get('FRONTEND_URL', 'http://localhost:3000'));
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader(
+      'Access-Control-Allow-Origin',
+      this.config.get('FRONTEND_URL', 'http://localhost:3000'),
+    );
     res.flushHeaders();
 
     const sendChunk = (chunk: StreamChunk) => {
@@ -59,35 +70,31 @@ export class AiService {
 
     try {
       const stream = this.client.messages.stream({
-        model:      req.model      ?? this.model,
-        max_tokens: req.maxTokens  ?? DEFAULT_MAX_TOKENS,
-        system:     req.systemPrompt ?? 'You are a helpful, concise assistant.',
-        messages:   req.messages,
-        signal:     abortController.signal,
+        model: req.model ?? this.model,
+        max_tokens: req.maxTokens ?? DEFAULT_MAX_TOKENS,
+        system: req.systemPrompt ?? 'You are a helpful, concise assistant.',
+        messages: req.messages,
+        signal: abortController.signal,
       });
 
       for await (const event of stream) {
-        if (
-          event.type === 'content_block_delta' &&
-          event.delta.type === 'text_delta'
-        ) {
+        if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
           sendChunk({ type: 'delta', content: event.delta.text });
         }
       }
 
       const finalMessage = await stream.finalMessage();
       const usage: AIUsage = {
-        inputTokens:  finalMessage.usage.input_tokens,
+        inputTokens: finalMessage.usage.input_tokens,
         outputTokens: finalMessage.usage.output_tokens,
-        totalTokens:  finalMessage.usage.input_tokens + finalMessage.usage.output_tokens,
+        totalTokens: finalMessage.usage.input_tokens + finalMessage.usage.output_tokens,
       };
 
       sendChunk({
-        type:   'done',
+        type: 'done',
         tokens: usage.outputTokens,
         usage,
       });
-
     } catch (err: any) {
       if (abortController.signal.aborted) return;
       sendChunk({ type: 'error', error: err.message ?? 'AI request failed' });
@@ -106,21 +113,23 @@ export class AiService {
       throw new BadRequestException('Text too long — max 50,000 characters');
     }
 
-    const mode   = req.mode ?? 'brief';
+    const mode = req.mode ?? 'brief';
     const prompt = SUMMARIZE_PROMPTS[mode];
 
     const response = await this.client.messages.create({
-      model:      this.model,
+      model: this.model,
       max_tokens: mode === 'detailed' ? 800 : 400,
-      messages: [{
-        role:    'user',
-        content: `${prompt}\n\n---\n\n${req.text}`,
-      }],
+      messages: [
+        {
+          role: 'user',
+          content: `${prompt}\n\n---\n\n${req.text}`,
+        },
+      ],
     });
 
-    const summary   = getTextContent(response.content);
+    const summary = getTextContent(response.content);
     const wordCount = req.text.trim().split(/\s+/).length;
-    const readTime  = Math.max(1, Math.round(wordCount / 200));
+    const readTime = Math.max(1, Math.round(wordCount / 200));
 
     return {
       summary,
@@ -134,10 +143,10 @@ export class AiService {
 
   async complete(prompt: string, system?: string): Promise<string> {
     const response = await this.client.messages.create({
-      model:      this.model,
+      model: this.model,
       max_tokens: DEFAULT_MAX_TOKENS,
-      system:     system ?? 'You are a helpful assistant.',
-      messages:   [{ role: 'user', content: prompt }],
+      system: system ?? 'You are a helpful assistant.',
+      messages: [{ role: 'user', content: prompt }],
     });
     return getTextContent(response.content);
   }

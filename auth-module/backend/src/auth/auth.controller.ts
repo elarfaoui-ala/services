@@ -1,13 +1,27 @@
 import {
-  Controller, Post, Get, Body, UseGuards, Request, HttpCode, HttpStatus,
+  Controller,
+  Post,
+  Get,
+  Body,
+  UseGuards,
+  Request,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
-import { AuthGuard }   from '@nestjs/passport';
-import { Throttle }    from '@nestjs/throttler';
+import { AuthGuard } from '@nestjs/passport';
+import { Throttle } from '@nestjs/throttler';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto, RefreshDto, VerifyEmailDto, ForgotPasswordDto, ResetPasswordDto } from './auth.dto';
-import { Roles, RolesGuard }                 from './roles.guard';
-import { Reflector }                          from '@nestjs/core';
+import {
+  RegisterDto,
+  LoginDto,
+  RefreshDto,
+  VerifyEmailDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+} from './auth.dto';
+import { Roles, RolesGuard } from './roles.guard';
+import { Reflector } from '@nestjs/core';
 
 @ApiTags('Auth')
 @Controller('auth')

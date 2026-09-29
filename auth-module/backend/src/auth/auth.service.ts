@@ -1,23 +1,25 @@
 import {
-  Injectable, ConflictException, UnauthorizedException, NotFoundException,
-  BadRequestException, Logger,
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+  NotFoundException,
+  BadRequestException,
+  Logger,
 } from '@nestjs/common';
-import { JwtService }            from '@nestjs/jwt';
-import * as bcrypt               from 'bcryptjs';
-import { eq, and, gt, lt }      from 'drizzle-orm';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
+import { eq, and, gt, lt } from 'drizzle-orm';
 import { randomBytes, createHash } from 'crypto';
-import { db }                    from '../db';
+import { db } from '../db';
 import { users, refreshTokens, verificationTokens, passwordResetTokens } from '../db/schema';
-import { EmailService }          from '../email/email.service';
-import { EventBus, EVENTS }      from '@services/core';
-import {
-  RegisterDto, LoginDto, JwtPayload, AuthTokens, AuthResponse,
-} from './auth.dto';
+import { EmailService } from '../email/email.service';
+import { EventBus, EVENTS } from '@services/core';
+import { RegisterDto, LoginDto, JwtPayload, AuthTokens, AuthResponse } from './auth.dto';
 
-const SALT_ROUNDS    = 12;
-const ACCESS_EXPIRY  = '15m';
+const SALT_ROUNDS = 12;
+const ACCESS_EXPIRY = '15m';
 const REFRESH_EXPIRY = '7d';
-const MS_7_DAYS      = 7 * 24 * 60 * 60 * 1000;
+const MS_7_DAYS = 7 * 24 * 60 * 60 * 1000;
 
 function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
@@ -40,12 +42,15 @@ export class AuthService {
     if (existing) throw new ConflictException('Email already in use');
 
     const hashed = await bcrypt.hash(dto.password, SALT_ROUNDS);
-    const [user] = await db.insert(users).values({
-      email:    dto.email,
-      password: hashed,
-      name:     dto.name,
-      role:     dto.role ?? 'user',
-    }).returning();
+    const [user] = await db
+      .insert(users)
+      .values({
+        email: dto.email,
+        password: hashed,
+        name: dto.name,
+        role: dto.role ?? 'user',
+      })
+      .returning();
 
     const tokens = await this.generateTokens(user.id, user.email, user.role);
     await this.saveRefreshToken(user.id, tokens.refreshToken);
@@ -53,16 +58,28 @@ export class AuthService {
 
     this.logger.log(`User registered: ${user.email} (${user.id})`);
 
-    this.eventBus.publish(EVENTS.USER_REGISTERED, {
-      userId: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-    }, 'auth-module').catch((err) => this.logger.warn(`Failed to publish USER_REGISTERED: ${err}`));
+    this.eventBus
+      .publish(
+        EVENTS.USER_REGISTERED,
+        {
+          userId: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        },
+        'auth-module',
+      )
+      .catch((err) => this.logger.warn(`Failed to publish USER_REGISTERED: ${err}`));
 
     return {
       ...tokens,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role, emailVerified: false },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        emailVerified: false,
+      },
     };
   }
 
@@ -80,24 +97,33 @@ export class AuthService {
 
     this.logger.log(`User logged in: ${user.email}`);
 
-    this.eventBus.publish(EVENTS.USER_LOGGED_IN, {
-      userId: user.id,
-      email: user.email,
-    }, 'auth-module').catch((err) => this.logger.warn(`Failed to publish USER_LOGGED_IN: ${err}`));
+    this.eventBus
+      .publish(
+        EVENTS.USER_LOGGED_IN,
+        {
+          userId: user.id,
+          email: user.email,
+        },
+        'auth-module',
+      )
+      .catch((err) => this.logger.warn(`Failed to publish USER_LOGGED_IN: ${err}`));
 
     return {
       ...tokens,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role, emailVerified: user.emailVerified },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        emailVerified: user.emailVerified,
+      },
     };
   }
 
   async refresh(token: string): Promise<AuthTokens> {
     const tokenHash = hashToken(token);
     const stored = await db.query.refreshTokens.findFirst({
-      where: and(
-        eq(refreshTokens.token, tokenHash),
-        gt(refreshTokens.expiresAt, new Date()),
-      ),
+      where: and(eq(refreshTokens.token, tokenHash), gt(refreshTokens.expiresAt, new Date())),
     });
     if (!stored) throw new UnauthorizedException('Invalid or expired refresh token');
 
@@ -115,7 +141,10 @@ export class AuthService {
 
   async logout(token: string): Promise<void> {
     const tokenHash = hashToken(token);
-    const result = await db.delete(refreshTokens).where(eq(refreshTokens.token, tokenHash)).returning({ id: refreshTokens.id });
+    const result = await db
+      .delete(refreshTokens)
+      .where(eq(refreshTokens.token, tokenHash))
+      .returning({ id: refreshTokens.id });
     if (result.length > 0) {
       this.logger.log(`Refresh token revoked: ${result[0].id}`);
     }
@@ -133,7 +162,10 @@ export class AuthService {
     if (!stored) throw new BadRequestException('Invalid or expired verification token');
 
     await db.update(users).set({ emailVerified: true }).where(eq(users.id, stored.userId));
-    await db.update(verificationTokens).set({ usedAt: new Date() }).where(eq(verificationTokens.id, stored.id));
+    await db
+      .update(verificationTokens)
+      .set({ usedAt: new Date() })
+      .where(eq(verificationTokens.id, stored.id));
     this.logger.log(`Email verified for user: ${stored.userId}`);
   }
 
@@ -162,17 +194,29 @@ export class AuthService {
 
     const hashed = await bcrypt.hash(newPassword, SALT_ROUNDS);
     await db.update(users).set({ password: hashed }).where(eq(users.id, stored.userId));
-    await db.update(passwordResetTokens).set({ usedAt: new Date() }).where(eq(passwordResetTokens.id, stored.id));
+    await db
+      .update(passwordResetTokens)
+      .set({ usedAt: new Date() })
+      .where(eq(passwordResetTokens.id, stored.id));
     this.logger.log(`Password reset for user: ${stored.userId}`);
 
-    this.eventBus.publish(EVENTS.USER_PASSWORD_RESET, {
-      userId: stored.userId,
-      email: '',
-    }, 'auth-module').catch((err) => this.logger.warn(`Failed to publish USER_PASSWORD_RESET: ${err}`));
+    this.eventBus
+      .publish(
+        EVENTS.USER_PASSWORD_RESET,
+        {
+          userId: stored.userId,
+          email: '',
+        },
+        'auth-module',
+      )
+      .catch((err) => this.logger.warn(`Failed to publish USER_PASSWORD_RESET: ${err}`));
   }
 
   async cleanupExpiredTokens(): Promise<number> {
-    const deleted = await db.delete(refreshTokens).where(lt(refreshTokens.expiresAt, new Date())).returning({ id: refreshTokens.id });
+    const deleted = await db
+      .delete(refreshTokens)
+      .where(lt(refreshTokens.expiresAt, new Date()))
+      .returning({ id: refreshTokens.id });
     await db.delete(verificationTokens).where(lt(verificationTokens.expiresAt, new Date()));
     await db.delete(passwordResetTokens).where(lt(passwordResetTokens.expiresAt, new Date()));
     if (deleted.length > 0) {
@@ -188,9 +232,7 @@ export class AuthService {
     await this.emailService.sendVerificationEmail(user.email, token);
   }
 
-  private async generateTokens(
-    userId: string, email: string, role: string,
-  ): Promise<AuthTokens> {
+  private async generateTokens(userId: string, email: string, role: string): Promise<AuthTokens> {
     const payload: JwtPayload = { sub: userId, email, role };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, { expiresIn: ACCESS_EXPIRY }),

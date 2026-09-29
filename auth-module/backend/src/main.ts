@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { AppModule }   from './app.module';
+import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { StructuredLogger } from '@services/core';
 
@@ -18,7 +18,7 @@ async function bootstrap() {
     .filter(Boolean);
 
   app.enableCors({
-    origin:      corsOrigins,
+    origin: corsOrigins,
     credentials: true,
   });
 

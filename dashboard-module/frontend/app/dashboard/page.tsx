@@ -1,10 +1,10 @@
 'use client';
 
-import { useDashboard }      from '../../lib/use-dashboard';
-import { KpiCard, KpiCardSkeleton }     from '../../components/kpi/kpi-card';
+import { useDashboard } from '../../lib/use-dashboard';
+import { KpiCard, KpiCardSkeleton } from '../../components/kpi/kpi-card';
 import { ChartCard, ChartCardSkeleton } from '../../components/charts/chart-card';
-import { DateRangeFilter }  from '../../components/filters/date-range-filter';
-import { DashboardHeader }  from '../../components/layout/dashboard-header';
+import { DateRangeFilter } from '../../components/filters/date-range-filter';
+import { DashboardHeader } from '../../components/layout/dashboard-header';
 
 export default function DashboardPage() {
   const { data, filter, isLoading, isRefreshing, error, lastUpdated, setFilter, refresh } =
@@ -13,7 +13,6 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-
         {/* Header */}
         <DashboardHeader
           lastUpdated={lastUpdated}
@@ -35,8 +34,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => <KpiCardSkeleton key={i} />)
-            : data?.kpis.map(kpi => <KpiCard key={kpi.id} kpi={kpi} />)
-          }
+            : data?.kpis.map((kpi) => <KpiCard key={kpi.id} kpi={kpi} />)}
         </div>
 
         {/* Charts */}
@@ -47,16 +45,14 @@ export default function DashboardPage() {
                 <div key={chart.id} className={i === 0 ? 'lg:col-span-2' : ''}>
                   <ChartCard chart={chart} />
                 </div>
-              ))
-          }
+              ))}
         </div>
 
         {/* Period info */}
         {data && (
           <p className="text-xs text-gray-400 text-center">
             Period: {new Date(data.period.from).toLocaleDateString()} to{' '}
-            {new Date(data.period.to).toLocaleDateString()}
-            {' '} · Auto-refreshes every 30s
+            {new Date(data.period.to).toLocaleDateString()} · Auto-refreshes every 30s
           </p>
         )}
       </div>

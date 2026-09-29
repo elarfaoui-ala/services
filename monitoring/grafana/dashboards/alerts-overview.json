@@ -182,8 +182,14 @@
               {
                 "id": "mappings",
                 "value": [
-                  { "type": "value", "options": { "firing": { "color": "red", "text": "FIRING" } } },
-                  { "type": "value", "options": { "pending": { "color": "yellow", "text": "PENDING" } } }
+                  {
+                    "type": "value",
+                    "options": { "firing": { "color": "red", "text": "FIRING" } }
+                  },
+                  {
+                    "type": "value",
+                    "options": { "pending": { "color": "yellow", "text": "PENDING" } }
+                  }
                 ]
               }
             ]
@@ -440,9 +446,7 @@
           "unit": "short",
           "color": { "mode": "thresholds" },
           "thresholds": {
-            "steps": [
-              { "color": "blue", "value": null }
-            ]
+            "steps": [{ "color": "blue", "value": null }]
           }
         },
         "overrides": []
